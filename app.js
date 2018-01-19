@@ -5,12 +5,23 @@ const clearBtn = document.querySelector('.clear-tasks');
 const filter = document.querySelector('#filter');
 const taskInput = document.querySelector('#task');
 
-// Calling loadEventListener
+
+// Calling loadEventListeners
 loadEventListeners();
 
 // Load all event listener
 function loadEventListeners() {
+  // Add task event
   form.addEventListener('submit', addTask);
+
+  // Remove task event
+  taskList.addEventListener('click', removeTask);
+
+  // Clear task event
+  clearBtn.addEventListener('click', clearTask);
+
+  // filter task event
+  filter.addEventListener('keyup', filterTask);
 }
 
 // Add task function  
@@ -47,5 +58,40 @@ function addTask(e) {
 
   // Clear the input field
   taskInput.value = '';
+}
 
+// Remove Task function
+function removeTask(e) {
+  if(e.target.parentElement.classList.contains('delete-item')) {
+    e.target.parentElement.parentElement.remove();
+  }
+}
+
+// Clear task function
+function clearTask() {
+  
+  if(confirm('Are you sure?')) {
+    // Clear with innerHTML(slow)
+    // taskList.innerHTML = '';
+
+    // Clear with while loop (faster)
+    while(taskList.firstChild) {
+      taskList.removeChild(taskList.firstChild);
+    }
+  }
+
+}
+
+// Filter task function
+function filterTask(e) {
+  let text = e.target.value.toLowerCase();
+
+  document.querySelectorAll('.collection-item').forEach(task => {
+    const itemText = task.firstChild.textContent.toLowerCase();
+    if (itemText.indexOf(text) !== -1) {
+      task.style.display = 'block';
+    } else {
+      task.style.display = 'none';
+    }
+  });
 }
